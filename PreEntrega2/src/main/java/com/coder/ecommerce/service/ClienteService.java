@@ -20,6 +20,11 @@ public class ClienteService {
         return this.repositorio.findAll();
     }
 
+    public void inicializarClientes (){
+        repositorio.save(new Cliente("Alejandro", "Baldres", "31552477"));
+        repositorio.save(new Cliente("Hugo", "Basso","12478447"));
+        repositorio.save(new Cliente("Raquel", "Garcia", "25784787"));
+    }
     public ResponseEntity<String> grabar(Cliente cliente){
         if (cliente.getNombre() == null || cliente.getApellido() == null ||
                 cliente.getDni() == null)    {

@@ -44,13 +44,6 @@ public class Factura implements Serializable {
     public List<DetalleFactura> getDetalleFactura() {
         return this.detalleFactura;
     }
-/*
-    public DetalleFactura addDetalle(DetalleFactura detalle) {
-        getDetalleFactura().add(detalle);
-        detalle.setFacturas(this);
 
-        return detalle;
-    }
-*/
 
 }

@@ -9,14 +9,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 // Aqui se aplican toda la logica de Negocio de Factura
 @Service
 public class FacturaService {
     @Autowired
     private RepositoryFactura repositorio;
+
+    @Autowired
+    private RelojService relojService;
     /*@Autowired
     private RepositoryDetalleFactura repoDetalleFactura;
 */
@@ -33,8 +41,7 @@ public class FacturaService {
     private FacturaDTO crearFactura (Factura factura){
         FacturaDTO dto = new FacturaDTO();
         dto.setId(factura.getId());
-        System.out.println("ID: " + factura.getId().toString());
-        //dto.setDetalleFactura(factura.getDetalleFactura());
+
         List<DetalleFacturaDTO> dtoDetalle = new ArrayList<DetalleFacturaDTO>();
         for (DetalleFactura producto: factura.getDetalleFactura()){
                 DetalleFacturaDTO linea = new DetalleFacturaDTO();
@@ -45,8 +52,6 @@ public class FacturaService {
                 dtoDetalle.add(linea);
         }
         dto.setDetalleFactura(dtoDetalle);
-        System.out.println(factura.toString());
-
         dto.setCreadoEn(factura.getCreadoEn());
         dto.setTotal(factura.getTotal());
         dto.setIdCliente(factura.getIdCliente());
@@ -62,7 +67,9 @@ public class FacturaService {
             try {
                 Factura facturaAGuardar = new Factura();
                 facturaAGuardar.setIdCliente(factura.getIdCliente());
-                facturaAGuardar.setCreadoEn(factura.getCreadoEn());
+                String fechaString = relojService.getDato();
+                LocalDateTime fecha = LocalDateTime.parse(fechaString);
+                facturaAGuardar.setCreadoEn(fecha);
                 facturaAGuardar.setId(factura.getId());
                 facturaAGuardar.setTotal(factura.getTotal());
                 List<DetalleFactura> lineas = new ArrayList<>();
@@ -92,6 +99,7 @@ public class FacturaService {
                 updateFactura.setCreadoEn(factura.getCreadoEn());
                 updateFactura.setTotal(factura.getTotal());
                 this.repositorio.save(updateFactura);
+
                 return ResponseEntity.status(200).body("200 -> Operacion Satisfactoria!\n");
             } catch (Exception e) {
                 return ResponseEntity.status(409).body("409 -> La operacion no se pudo realizar, verificar!\n");

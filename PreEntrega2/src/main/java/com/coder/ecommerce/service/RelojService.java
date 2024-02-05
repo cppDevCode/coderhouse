@@ -10,8 +10,12 @@ import java.util.Map;
 public class RelojService {
     @Autowired
     private RelojRestApi relojRestApi;
-
-    public Map<String,List<String>> getHora(){
-        return relojRestApi.getHora();
+    private String  dato;
+    public String getDato(){
+        this.dato = relojRestApi.getDato();
+        System.out.println(dato);
+        return this.dato;
     }
+
+
 }
