@@ -23,4 +23,12 @@ public class Producto {
 
     @Column
     private Double precio;
+
+    public Producto(){}
+    public Producto (String descripcionS, String codigoS, int stockI, Double precioD ){
+        this.descripcion = descripcionS;
+        this.codigo = codigoS;
+        this.stock = stockI;
+        this.precio = precioD;
+    }
 }

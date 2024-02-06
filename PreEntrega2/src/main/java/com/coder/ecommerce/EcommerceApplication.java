@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class EcommerceApplication {
 
+
 	public static void main(String[] args) {
 
 		System.out.println("Segunda Pre-Entrega de Trabajo Final");
@@ -16,6 +17,7 @@ public class EcommerceApplication {
 		System.out.println("Comision: 50280");
 		System.out.println("Estudiante: Alejandro Lucas Baldres");
 		SpringApplication.run(EcommerceApplication.class, args);
+
 
 	}
 

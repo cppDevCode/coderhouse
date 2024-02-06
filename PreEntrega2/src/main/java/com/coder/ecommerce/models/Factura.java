@@ -45,5 +45,11 @@ public class Factura implements Serializable {
         return this.detalleFactura;
     }
 
+    public Factura (Long idClienteN, Double totalPesos){
+        this.idCliente = idClienteN;
+        this.total = totalPesos;
+        this.creadoEn = LocalDateTime.now();
+    }
+
 
 }

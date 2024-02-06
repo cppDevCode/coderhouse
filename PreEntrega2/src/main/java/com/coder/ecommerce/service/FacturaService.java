@@ -1,10 +1,8 @@
 package com.coder.ecommerce.service;
 
-import com.coder.ecommerce.models.DetalleFactura;
-import com.coder.ecommerce.models.DetalleFacturaDTO;
-import com.coder.ecommerce.models.FacturaDTO;
+import com.coder.ecommerce.models.*;
 import com.coder.ecommerce.repository.RepositoryFactura;
-import com.coder.ecommerce.models.Factura;
+import com.coder.ecommerce.repository.RepositoryProducto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -12,10 +10,7 @@ import org.springframework.stereotype.Service;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 // Aqui se aplican toda la logica de Negocio de Factura
 @Service
@@ -24,13 +19,31 @@ public class FacturaService {
     private RepositoryFactura repositorio;
 
     @Autowired
+    private RepositoryProducto repositoryProducto;
+
+    @Autowired
     private RelojService relojService;
-    /*@Autowired
-    private RepositoryDetalleFactura repoDetalleFactura;
-*/
+
+    public void inicializarDatosFactura(){
+        for (int i = 1; i <= 3; i++) {
+            Factura comprobante = new Factura(Long.valueOf(i), 125.00);
+            List<DetalleFactura> df = new ArrayList<DetalleFactura>();
+            String descripcion[] = {"Disco Compacto","Computadora","Heladera"};
+            String codigo[] = {"144777840","11457752","478745512"};
+            repositoryProducto.save(new Producto(descripcion[i-1],codigo[i-1],i,125.00));
+            for (int j = 1; j <= 3; j++) {
+                Double precio = 150.00 / j;
+                df.add(new DetalleFactura(1, Long.valueOf(j), precio, comprobante));
+
+            }
+
+            comprobante.setDetalleFactura(df);
+            repositorio.save(comprobante);
+        }
+    }
     public List<FacturaDTO> listar()
     {
-        //return this.repositorio.findAll();
+
         List<FacturaDTO> facturaAListar = new ArrayList<FacturaDTO>();
         for (Factura comprobante:this.repositorio.findAll()){
                 facturaAListar.add(crearFactura(comprobante));
