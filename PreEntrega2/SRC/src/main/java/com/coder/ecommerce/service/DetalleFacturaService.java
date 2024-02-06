@@ -19,40 +19,5 @@ public class DetalleFacturaService {
         return this.repositorio.findAll();
     }
 
-    public ResponseEntity<String> agregar(DetalleFactura detalleFactura){
-        /*
-        if (detalleFactura.getIdFactura() == null || detalleFactura.getIdProducto() == null ||
-                detalleFactura.getPrecio() == null )    {
-            return ResponseEntity.status(409).body("409 -> La operacion no se pudo realizar, verificar!\n");
-        } else
-        {
-            try {
-                this.repositorio.save(detalleFactura);
-                return ResponseEntity.status(200).body("200 -> Operacion Satisfactoria!\n");
-            } catch (Exception e) {*/
-                return ResponseEntity.status(409).body("409 -> La operacion no se pudo realizar, verificar!\n");
-            /*}
-        }*/
-    }
-
-    public ResponseEntity<String> modificar(Long id, DetalleFactura detalleFactura){
-        /*
-        if (detalleFactura.getIdFactura() == null || detalleFactura.getIdProducto() == null ||
-                detalleFactura.getPrecio() == null )    {
-            return ResponseEntity.status(409).body("409 -> La operacion no se pudo realizar, verificar!\n");
-        } else {
-            try {
-                DetalleFactura updateDetalleFactura = this.repositorio.findById(id).get();
-                updateDetalleFactura.setIdFactura(detalleFactura.getIdFactura());
-                updateDetalleFactura.setCantidad(detalleFactura.getCantidad());
-                updateDetalleFactura.setIdProducto(detalleFactura.getIdProducto());
-                updateDetalleFactura.setPrecio(detalleFactura.getPrecio());
-                this.repositorio.save(updateDetalleFactura);
-                return ResponseEntity.status(200).body("200 -> Operacion Satisfactoria!\n");
-            } catch (Exception e) {*/
-                return ResponseEntity.status(409).body("409 -> La operacion no se pudo realizar, verificar!\n");
-            /*}
-        }*/
-    }
 
 }
