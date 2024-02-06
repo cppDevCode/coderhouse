@@ -2,18 +2,29 @@
 
 ## Ventas API REST
 
-### 1er Pre-Entrega
+### 2da Pre-Entrega
 
 #### Realizado
+##### Primera Pre-Entrega 
 - Se definio Entidades/Controladores y algunos Services
 - Se genero la DataBase en MySql (se adjunta instrucciones de generacion de tablas)
 - Se empleo SpringBoot con JPA
 - Se encuentra Funcional para CRUD clientes/productos/facturas-detalles de facturas
 
+##### Segunda Pre-Entrega
+- Se consume API externa de acuerdo a lo solicitado
+- Se Agrego DTO en Factura y Detalle de comprobante
+- Se Agregaron Relaciones entre facturas y comprobantes
+- Eliminacion en Cascada de Factura y Detalles de comprobantes
+
 #### To-do
-- Join de tablas
+- Terminar con las relaciones
 - Funcionabilidad completa
 - etc...
+
+### Ejecucion
+
+`$ java -jar 2daPreEntrega-Baldres.jar`
 
 ### Route:
 - server.com/ : Muestra una pequeña ayuda
