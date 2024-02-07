@@ -12,7 +12,7 @@ import java.util.List;
 //Devuelve codigo 200 si esta todo OK y 409 si no pudo concretar la operacion
 
 @RestController
-@RequestMapping(path = "/clientes")
+@RequestMapping(path = "api/clientes")
 public class ControllerCliente {
     @Autowired
     private ClienteService servicioCliente;

@@ -29,16 +29,16 @@ public class DetalleFactura implements Serializable {
     private Producto Producto;
 
     @Column
-    private Double precio;
+    private Double subtotal;
 
     @ManyToOne
     @JoinColumn(name = "FK_FACTURA", nullable = false, updatable = false)
     private Factura factura;
 
     public DetalleFactura(){};
-    public DetalleFactura(int cantidadP, Double precioF, Factura f) {
+    public DetalleFactura(int cantidadP, Double subtotalF, Factura f) {
         this.cantidad = cantidadP;
-        this.precio = precioF;
+        this.subtotal = subtotalF;
         this.factura = f;
     }
 }

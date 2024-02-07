@@ -1,7 +1,9 @@
 package com.coder.ecommerce.service;
 
 import com.coder.ecommerce.models.Cliente;
+import com.coder.ecommerce.models.Factura;
 import com.coder.ecommerce.repository.RepositoryCliente;
+import com.coder.ecommerce.repository.RepositoryFactura;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,9 @@ import java.util.List;
 public class ClienteService {
     @Autowired
     private RepositoryCliente repositorio;
+
+    @Autowired
+    private RepositoryFactura repositoryFactura;
 
     public List<Cliente> listar (){
         return this.repositorio.findAll();
@@ -59,6 +64,7 @@ public class ClienteService {
     public ResponseEntity<String> borrar(Long id){
         try{
             Cliente deleteCliente = this.repositorio.findById(id).get();
+
             this.repositorio.delete(deleteCliente);
             return ResponseEntity.status(200).body("200 -> Operacion Satisfactoria!\n");
         } catch (Exception e) {

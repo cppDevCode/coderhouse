@@ -11,7 +11,7 @@ import java.util.List;
 //Devuelve codigo 200 si esta todo OK y 409 si no pudo concretar la operacion
 
 @RestController
-@RequestMapping(path = "/productos")
+@RequestMapping(path = "api/productos")
 public class ControllerProducto {
     @Autowired
     private ProductoService servicioProducto;

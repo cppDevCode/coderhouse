@@ -90,7 +90,7 @@ public class FacturaService {
                 productoDTO.setDescripcion(producto.getProducto().getDescripcion());
                 productoDTO.setStock(producto.getProducto().getStock());
                 linea.setProducto(productoDTO);
-                linea.setPrecio(producto.getPrecio());
+                linea.setPrecio(producto.getSubtotal());
                 dtoDetalle.add(linea);
 
         }
@@ -108,13 +108,16 @@ public class FacturaService {
     }
 
     public ResponseEntity<String> agregar(Factura factura){
-        if (factura.getCliente() == null || factura.getCreadoEn() == null ||
+
+        if (factura.getCliente() == null ||
                 factura.getTotal() == null)    {
+
             return ResponseEntity.status(409).body("409 -> La operacion no se pudo realizar, verificar!\n");
         } else
         {
             try {
                 Factura facturaAGuardar = new Factura();
+                repositoryCliente.save(factura.getCliente());
                 facturaAGuardar.setCliente(factura.getCliente());
                 String fechaString = relojService.getDato();
                 LocalDateTime fecha = LocalDateTime.parse(fechaString);
@@ -125,6 +128,7 @@ public class FacturaService {
                 for (DetalleFactura linea: factura.getDetalleFactura()){
                     linea.setFactura(facturaAGuardar);
                     lineas.add(linea);
+                    repositoryProducto.save(linea.getProducto());
                 }
                 facturaAGuardar.setDetalleFactura(lineas);
 
@@ -137,9 +141,9 @@ public class FacturaService {
         }
     }
 
+    ///TENGO QUE ACOMODAR MODIFICAR
     public ResponseEntity<String> modificar(Long id, Factura factura){
-        if (factura.getCliente() == null || factura.getCreadoEn() == null ||
-                factura.getTotal() == null)    {
+        if (factura.getCliente() == null || factura.getTotal() == null)    {
             return ResponseEntity.status(409).body("409 -> La operacion no se pudo realizar, verificar!\n");
         } else {
             try {

@@ -12,7 +12,7 @@ import java.util.List;
 //Devuelve codigo 200 si esta todo OK y 409 si no pudo concretar la operacion
 
 @RestController
-@RequestMapping(path = "/facturas")
+@RequestMapping(path = "api/facturas")
 public class ControllerFactura {
     @Autowired
     private FacturaService facturaServicio;
