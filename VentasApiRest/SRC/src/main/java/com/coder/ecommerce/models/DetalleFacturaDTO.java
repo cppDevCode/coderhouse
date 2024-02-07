@@ -3,19 +3,11 @@ package com.coder.ecommerce.models;
 import java.util.List;
 
 public class DetalleFacturaDTO {
-    private Long id;
     private int cantidad;
     private ProductoDTO producto;
     private Double precio;
 
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public int getCantidad() {
         return cantidad;

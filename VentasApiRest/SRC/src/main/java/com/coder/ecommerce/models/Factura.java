@@ -26,9 +26,9 @@ public class Factura implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="id_cliente")
-
-    private Long idCliente;
+    @ManyToOne
+    @JoinColumn(name="idCliente")
+    private Cliente cliente;
 
     @Column(name="creado_en")
     private LocalDateTime creadoEn;
@@ -45,8 +45,8 @@ public class Factura implements Serializable {
         return this.detalleFactura;
     }
 
-    public Factura (Long idClienteN, Double totalPesos){
-        this.idCliente = idClienteN;
+    public Factura (Cliente clienteN, Double totalPesos){
+        this.cliente = clienteN;
         this.total = totalPesos;
         this.creadoEn = LocalDateTime.now();
     }

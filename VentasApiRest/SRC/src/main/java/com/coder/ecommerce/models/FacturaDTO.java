@@ -6,7 +6,7 @@ import java.util.List;
 
 public class FacturaDTO {
     private Long id;
-    private Long idCliente;
+    private ClienteDTO cliente;
 
     private LocalDateTime creadoEn;
     private Double total;
@@ -25,12 +25,12 @@ public class FacturaDTO {
         this.id = id;
     }
 
-    public Long getIdCliente() {
-        return idCliente;
+    public ClienteDTO getCliente() {
+        return cliente;
     }
 
-    public void setIdCliente(Long idCliente) {
-        this.idCliente = idCliente;
+    public void setCliente(ClienteDTO cliente) {
+        this.cliente = cliente;
     }
 
     public LocalDateTime getCreadoEn() {

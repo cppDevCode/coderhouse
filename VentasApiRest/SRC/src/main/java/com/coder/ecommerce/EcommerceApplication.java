@@ -12,7 +12,7 @@ public class EcommerceApplication {
 
 	public static void main(String[] args) {
 
-		System.out.println("Segunda Pre-Entrega de Trabajo Final");
+		System.out.println("Trabajo Final: Ventas APIRest");
 		System.out.println("Curso de Programación en JAVA");
 		System.out.println("Comision: 50280");
 		System.out.println("Estudiante: Alejandro Lucas Baldres");

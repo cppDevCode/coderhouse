@@ -23,6 +23,8 @@ public class Cliente {
 
     @Column
     private String dni;
+
+    public Cliente(){}
     public Cliente(String nom, String apel, String dni){
         this.nombre = nom;
         this.apellido = apel;

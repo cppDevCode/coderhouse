@@ -1,6 +1,7 @@
 package com.coder.ecommerce.service;
 
 import com.coder.ecommerce.models.*;
+import com.coder.ecommerce.repository.RepositoryCliente;
 import com.coder.ecommerce.repository.RepositoryFactura;
 import com.coder.ecommerce.repository.RepositoryProducto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +21,18 @@ public class FacturaService {
     private RepositoryProducto repositoryProducto;
 
     @Autowired
+    private RepositoryCliente repositoryCliente;
+
+    @Autowired
     private RelojService relojService;
 
     //Carga los datos de las facturas, detalle y productos
     public void inicializarDatosFactura(){
         for (int i = 1; i <= 3; i++) {
-            Factura comprobante = new Factura(Long.valueOf(i), 125.00);
+
+            Long id = (long) i;
+
+            Factura comprobante = new Factura(repositoryCliente.findById(id).get(), 125.00);
             List<DetalleFactura> df = new ArrayList<DetalleFactura>();
             String descripcion[] = {"Disco Compacto","Computadora","Heladera"};
             String codigo[] = {"144777840","11457752","478745512"};
@@ -39,9 +46,10 @@ public class FacturaService {
 
             for (int j = 1; j <= 3; j++) {
                 Double precio = 150.00 / j;
-                DetalleFactura detalle = new DetalleFactura(1,  precio, comprobante);
+
                 List<Producto> aux = new ArrayList<Producto>();
                 for (Producto p:listaProductos){
+                    DetalleFactura detalle = new DetalleFactura(1,  precio, comprobante);
                     Producto pd = new Producto();
                     pd.setPrecio(p.getPrecio());
                     pd.setStock(p.getStock());
@@ -75,7 +83,6 @@ public class FacturaService {
         List<DetalleFacturaDTO> dtoDetalle = new ArrayList<DetalleFacturaDTO>();
         for (DetalleFactura producto: factura.getDetalleFactura()){
                 DetalleFacturaDTO linea = new DetalleFacturaDTO();
-                linea.setId(producto.getId());
                 linea.setCantidad(producto.getCantidad());
                 ProductoDTO productoDTO = new ProductoDTO();
                 productoDTO.setCodigo(producto.getProducto().getCodigo());
@@ -85,24 +92,30 @@ public class FacturaService {
                 linea.setProducto(productoDTO);
                 linea.setPrecio(producto.getPrecio());
                 dtoDetalle.add(linea);
-                dto.setDetalleFactura(dtoDetalle);
-        }
 
+        }
+        dto.setDetalleFactura(dtoDetalle);
         dto.setCreadoEn(factura.getCreadoEn());
         dto.setTotal(factura.getTotal());
-        dto.setIdCliente(factura.getIdCliente());
+        ClienteDTO clienteDTO = new ClienteDTO();
+        Cliente cliente = new Cliente();
+        cliente = factura.getCliente();
+        clienteDTO.setApellido(cliente.getApellido());
+        clienteDTO.setDni(cliente.getDni());
+        clienteDTO.setNombre(cliente.getNombre());
+        dto.setCliente(clienteDTO);
         return dto;
     }
 
     public ResponseEntity<String> agregar(Factura factura){
-        if (factura.getIdCliente() == null || factura.getCreadoEn() == null ||
+        if (factura.getCliente() == null || factura.getCreadoEn() == null ||
                 factura.getTotal() == null)    {
             return ResponseEntity.status(409).body("409 -> La operacion no se pudo realizar, verificar!\n");
         } else
         {
             try {
                 Factura facturaAGuardar = new Factura();
-                facturaAGuardar.setIdCliente(factura.getIdCliente());
+                facturaAGuardar.setCliente(factura.getCliente());
                 String fechaString = relojService.getDato();
                 LocalDateTime fecha = LocalDateTime.parse(fechaString);
                 facturaAGuardar.setCreadoEn(fecha);
@@ -125,13 +138,13 @@ public class FacturaService {
     }
 
     public ResponseEntity<String> modificar(Long id, Factura factura){
-        if (factura.getIdCliente() == null || factura.getCreadoEn() == null ||
+        if (factura.getCliente() == null || factura.getCreadoEn() == null ||
                 factura.getTotal() == null)    {
             return ResponseEntity.status(409).body("409 -> La operacion no se pudo realizar, verificar!\n");
         } else {
             try {
                 Factura updateFactura = this.repositorio.findById(id).get();
-                updateFactura.setIdCliente(factura.getIdCliente());
+                updateFactura.setCliente(factura.getCliente());
                 updateFactura.setCreadoEn(factura.getCreadoEn());
                 updateFactura.setTotal(factura.getTotal());
                 this.repositorio.save(updateFactura);
