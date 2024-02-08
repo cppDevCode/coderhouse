@@ -1,6 +1,7 @@
 package com.coder.ecommerce.service;
 
 import com.coder.ecommerce.models.Cliente;
+import com.coder.ecommerce.models.ClienteDTO;
 import com.coder.ecommerce.models.Factura;
 import com.coder.ecommerce.repository.RepositoryCliente;
 import com.coder.ecommerce.repository.RepositoryFactura;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.ArrayList;
 import java.util.List;
 
 //Aqui se aplican toda la logica de Negocio de Clientes
@@ -21,8 +24,16 @@ public class ClienteService {
     @Autowired
     private RepositoryFactura repositoryFactura;
 
-    public List<Cliente> listar (){
-        return this.repositorio.findAll();
+    public List<ClienteDTO> listar (){
+        List<ClienteDTO> clienteDTOS = new ArrayList<ClienteDTO>();
+        for (Cliente cliente:this.repositorio.findAll()){
+            ClienteDTO clienteDTO = new ClienteDTO();
+            clienteDTO.setNombre(cliente.getNombre());
+            clienteDTO.setDni(cliente.getDni());
+            clienteDTO.setApellido(cliente.getApellido());
+            clienteDTOS.add(clienteDTO);
+        }
+        return clienteDTOS;
     }
 
     //Metodo de carga de datos en la base de datos, en la tabla Clientes
@@ -71,5 +82,6 @@ public class ClienteService {
             return ResponseEntity.status(409).body("409 -> La operacion no se pudo realizar, verificar!\n");
         }
     }
+
 
 }

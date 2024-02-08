@@ -38,7 +38,7 @@ public class FacturaService {
             String codigo[] = {"144777840","11457752","478745512"};
             List<Producto> listaProductos = new ArrayList<Producto>();
             for (int a = 0; a < 3; a++){
-                Producto producto = new Producto(descripcion[a],codigo[a],a,125.00);
+                Producto producto = new Producto(descripcion[a],codigo[a],5,125.00);
                 repositoryProducto.save(producto);
                 listaProductos.add(producto);
             }
@@ -88,7 +88,6 @@ public class FacturaService {
                 productoDTO.setCodigo(producto.getProducto().getCodigo());
                 productoDTO.setPrecio(producto.getProducto().getPrecio());
                 productoDTO.setDescripcion(producto.getProducto().getDescripcion());
-                productoDTO.setStock(producto.getProducto().getStock());
                 linea.setProducto(productoDTO);
                 linea.setPrecio(producto.getSubtotal());
                 dtoDetalle.add(linea);
@@ -106,7 +105,7 @@ public class FacturaService {
         dto.setCliente(clienteDTO);
         return dto;
     }
-
+//MEJORAR, CREAR OBJETOS SI NO EXISTEN EN LA BBDD
     public ResponseEntity<String> agregar(Factura factura){
 
         if (factura.getCliente() == null ||

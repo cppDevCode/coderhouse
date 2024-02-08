@@ -25,7 +25,6 @@ public class ProductoService {
             dtoProducto.setCodigo(producto.getCodigo());
             dtoProducto.setDescripcion(producto.getDescripcion());
             dtoProducto.setPrecio(producto.getPrecio());
-            dtoProducto.setStock(producto.getStock());
             productosDTO.add(dtoProducto);
         }
         return productosDTO;
@@ -66,6 +65,17 @@ public class ProductoService {
             Producto deleteProducto = this.repositorio.findById(id).get();
             this.repositorio.delete(deleteProducto);
             return ResponseEntity.status(200).body("200 -> Operacion Satisfactoria!\n");
+        } catch (Exception e) {
+            return ResponseEntity.status(409).body("409 -> La operacion no se pudo realizar, verificar!\n");
+        }
+    }
+
+    public ResponseEntity<String> actualizarStock (Long id, int unidadesVendidas){
+        try {
+                Producto updateProducto = this.repositorio.findById(id).get();
+                updateProducto.setStock(updateProducto.getStock() - unidadesVendidas);
+                this.repositorio.save(updateProducto);
+                return  ResponseEntity.status(200).body("200 -> Operacion Satisfactoria!\n");
         } catch (Exception e) {
             return ResponseEntity.status(409).body("409 -> La operacion no se pudo realizar, verificar!\n");
         }

@@ -9,10 +9,6 @@ public class ProductoDTO {
 
     private String codigo;
 
-
-    private int stock;
-
-
     private Double precio;
 
 
@@ -30,14 +26,6 @@ public class ProductoDTO {
 
     public void setCodigo(String codigo) {
         this.codigo = codigo;
-    }
-
-    public int getStock() {
-        return stock;
-    }
-
-    public void setStock(int stock) {
-        this.stock = stock;
     }
 
     public Double getPrecio() {

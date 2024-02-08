@@ -16,9 +16,9 @@
 - Se Agrego DTO en Factura y Detalle de comprobante
 - Se Agregaron Relaciones entre facturas y comprobantes
 - Eliminacion en Cascada de Factura y Detalles de comprobantes
+- Se descuenta productos vendidos
 
 #### To-do
-- Terminar con las relaciones
 - Funcionabilidad completa
 - etc...
 
@@ -27,17 +27,17 @@
 `$ java -jar 2daPreEntrega-Baldres.jar`
 
 ### Route:
-- server.com/ : Muestra una pequeña ayuda
-- server.com/clientes/listar: Lista la tabla de clientes
-- server.com/clientes/agregar: agrega el json definido a la db
-- server.com/clientes/modificar/{id}: modifica el registro de clientes de acuerdo a su ID
-- server.com/clientes/eliminar/{id}
-- server.com/productos/listar
-- server.com/productos/agregar
-- server.com/productos/modificar
-- server.com/productos/eliminar/{id}
-- server.com/facturas/listar
-- server.com/facturas/agregar
-- server.com/facturas/modificar
+- localhost:8080/api/clientes/listar: Lista la tabla de clientes
+- localhost:8080/api/clientes/agregar: agrega el json definido a la db
+- localhost:8080/api/clientes/modificar/{id}: modifica el registro de clientes de acuerdo a su ID
+- localhost:8080/api/clientes/eliminar/{id}
+- localhost:8080/api/productos/listar
+- localhost:8080/api/productos/agregar
+- localhost:8080/api/productos/modificar
+- localhost:8080/api/productos/eliminar/{id}
+- localhost:8080/api/productos/stock?id=[ID]&ventas=[PRODUCTOS_VENDIDOS]
+- localhost:8080/api/facturas/listar
+- localhost:8080/api/facturas/agregar
+- localhost:8080/api/facturas/modificar
 
 
