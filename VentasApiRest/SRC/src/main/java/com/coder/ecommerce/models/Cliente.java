@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 //Establezco Entidad para la tabla Clientes
 @Entity
@@ -24,6 +26,8 @@ public class Cliente {
     @Column
     private String dni;
 
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+    private List<Factura> facturas = new ArrayList<Factura>();
 
     public Cliente(){}
     public Cliente(String nom, String apel, String dni){
