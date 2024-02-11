@@ -24,7 +24,6 @@ public class ProductoService {
             ProductoDTO dtoProducto = new ProductoDTO();
             dtoProducto.setCodigo(producto.getCodigo());
             dtoProducto.setDescripcion(producto.getDescripcion());
-            dtoProducto.setPrecio(producto.getPrecio());
             productosDTO.add(dtoProducto);
         }
         return productosDTO;

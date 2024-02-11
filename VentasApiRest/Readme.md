@@ -1,26 +1,26 @@
-# Repositorio - Curso Programación con Java (CoderHouse)
+# Ventas APIRest
 
-## Ventas API REST
+### Resumen
+APIRest de ventas con patron de N Capas e implementacion de SpringBoot con JPA como ORM.
 
-### 2da Pre-Entrega
+### Estructura del Repositorio
 
-#### Realizado
-##### Primera Pre-Entrega 
-- Se definio Entidades/Controladores y algunos Services
-- Se genero la DataBase en MySql (se adjunta instrucciones de generacion de tablas)
-- Se empleo SpringBoot con JPA
-- Se encuentra Funcional para CRUD clientes/productos/facturas-detalles de facturas
+- bin: Contiene el/los archivo/s Java
+- doc: Documentacion de la APIRest
+- src: codigo fuente de la APIRest
+- postman scripts: Scripts de Postman
 
-##### Segunda Pre-Entrega
-- Se consume API externa de acuerdo a lo solicitado
-- Se Agrego DTO en Factura y Detalle de comprobante
-- Se Agregaron Relaciones entre facturas y comprobantes
-- Eliminacion en Cascada de Factura y Detalles de comprobantes
-- Se descuenta productos vendidos
 
-#### To-do
-- Funcionabilidad completa
-- etc...
+#### Dependencias
+- Spring Web
+- Spring Data JPA
+- Lombok
+
+###Configuracion de Spring
+- Maven
+- Spring Boot version 3.2.2
+- Java version: 21
+
 
 ### Ejecucion
 

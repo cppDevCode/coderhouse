@@ -5,7 +5,7 @@ import java.util.List;
 public class DetalleFacturaDTO {
     private int cantidad;
     private ProductoDTO producto;
-    private Double subtotal;
+    private Double precioProducto;
 
 
 
@@ -20,12 +20,12 @@ public class DetalleFacturaDTO {
 
 
 
-    public Double getSubtotal() {
-        return subtotal;
+    public Double getPrecioProducto() {
+        return precioProducto;
     }
 
-    public void setPrecio(Double subtotal) {
-        this.subtotal = subtotal;
+    public void setPrecio(Double precioProducto) {
+        this.precioProducto = precioProducto;
     }
 
 

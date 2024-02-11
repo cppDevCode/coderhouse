@@ -9,8 +9,6 @@ public class ProductoDTO {
 
     private String codigo;
 
-    private Double precio;
-
 
     public String getDescripcion() {
         return descripcion;
@@ -28,13 +26,6 @@ public class ProductoDTO {
         this.codigo = codigo;
     }
 
-    public Double getPrecio() {
-        return precio;
-    }
-
-    public void setPrecio(Double precio) {
-        this.precio = precio;
-    }
 
 
 }

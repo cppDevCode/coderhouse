@@ -29,7 +29,7 @@ public class DetalleFactura implements Serializable {
     private Producto Producto;
 
     @Column
-    private Double subtotal;
+    private Double precioProducto;
 
     @ManyToOne
     @JoinColumn(name = "FK_FACTURA", nullable = false, updatable = false)
@@ -38,7 +38,7 @@ public class DetalleFactura implements Serializable {
     public DetalleFactura(){};
     public DetalleFactura(int cantidadP, Double subtotalF, Factura f) {
         this.cantidad = cantidadP;
-        this.subtotal = subtotalF;
+        this.precioProducto = subtotalF;
         this.factura = f;
     }
 }

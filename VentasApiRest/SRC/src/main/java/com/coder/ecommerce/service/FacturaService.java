@@ -4,6 +4,7 @@ import com.coder.ecommerce.models.*;
 import com.coder.ecommerce.repository.RepositoryCliente;
 import com.coder.ecommerce.repository.RepositoryFactura;
 import com.coder.ecommerce.repository.RepositoryProducto;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -28,40 +29,47 @@ public class FacturaService {
 
     //Carga los datos de las facturas, detalle y productos
     public void inicializarDatosFactura(){
+        String descripcion[] = {"Disco Compacto","Computadora","Heladera"};
+        Double precios[] = {100.50,99.99,987.57};
+        Double total = 0.00;
+        int cantidad = 1;
+        String codigo[] = {"144777840","11457752","478745512"};
+
+        for (int a = 0; a < 3; a++){
+            Producto producto = new Producto(descripcion[a],codigo[a],5,precios[a]);
+            repositoryProducto.save(producto);
+
+        }
+
         for (int i = 1; i <= 3; i++) {
-
-            Long id = (long) i;
-
-            Factura comprobante = new Factura(repositoryCliente.findById(id).get(), 125.00);
             List<DetalleFactura> df = new ArrayList<DetalleFactura>();
-            String descripcion[] = {"Disco Compacto","Computadora","Heladera"};
-            String codigo[] = {"144777840","11457752","478745512"};
+            Long id = (long) i;
+            Factura comprobante = new Factura(repositoryCliente.findById(id).get(), total);
+            List<Producto> aux = new ArrayList<Producto>();
             List<Producto> listaProductos = new ArrayList<Producto>();
-            for (int a = 0; a < 3; a++){
-                Producto producto = new Producto(descripcion[a],codigo[a],5,125.00);
-                repositoryProducto.save(producto);
+            Random aleatorioInt = new Random();
+            int topeProductos = aleatorioInt.nextInt((5-1)+1) + 1;
+            for (int x = 0; x < topeProductos; x++) {
+                Producto producto = repositoryProducto.findById(aleatorioInt.nextLong((2-1)+1)+1).get();
                 listaProductos.add(producto);
             }
-
-
-            for (int j = 1; j <= 3; j++) {
-                Double precio = 150.00 / j;
-
-                List<Producto> aux = new ArrayList<Producto>();
-                for (Producto p:listaProductos){
-                    DetalleFactura detalle = new DetalleFactura(1,  precio, comprobante);
-                    Producto pd = new Producto();
-                    pd.setPrecio(p.getPrecio());
-                    pd.setStock(p.getStock());
-                    pd.setCodigo(p.getCodigo());
-                    pd.setDescripcion(p.getDescripcion());
-                    pd.setIdProducto(p.getIdProducto());
-                    detalle.setProducto(pd);
-                    df.add(detalle);
-                }
-
-
+            for (Producto p:listaProductos){
+                DetalleFactura detalle = new DetalleFactura(cantidad,  0.00, comprobante);
+                Producto pd = new Producto();
+                pd.setPrecio(p.getPrecio() * cantidad);
+                total += pd.getPrecio();
+                pd.setStock(p.getStock());
+                pd.setCodigo(p.getCodigo());
+                pd.setDescripcion(p.getDescripcion());
+                pd.setIdProducto(p.getIdProducto());
+                detalle.setProducto(pd);
+                detalle.setPrecioProducto(pd.getPrecio());
+                df.add(detalle);
             }
+            comprobante.setTotal(total);
+            total = 0.00;
+
+
 
             comprobante.setDetalleFactura(df);
             repositorio.save(comprobante);
@@ -86,10 +94,9 @@ public class FacturaService {
                 linea.setCantidad(producto.getCantidad());
                 ProductoDTO productoDTO = new ProductoDTO();
                 productoDTO.setCodigo(producto.getProducto().getCodigo());
-                productoDTO.setPrecio(producto.getProducto().getPrecio());
                 productoDTO.setDescripcion(producto.getProducto().getDescripcion());
                 linea.setProducto(productoDTO);
-                linea.setPrecio(producto.getSubtotal());
+                linea.setPrecio(producto.getPrecioProducto());
                 dtoDetalle.add(linea);
 
         }
@@ -105,30 +112,40 @@ public class FacturaService {
         dto.setCliente(clienteDTO);
         return dto;
     }
-//MEJORAR, CREAR OBJETOS SI NO EXISTEN EN LA BBDD
+
     public ResponseEntity<String> agregar(Factura factura){
 
-        if (factura.getCliente() == null ||
-                factura.getTotal() == null)    {
+        if (factura.getCliente() == null)    {
 
             return ResponseEntity.status(409).body("409 -> La operacion no se pudo realizar, verificar!\n");
         } else
         {
+
+
             try {
                 Factura facturaAGuardar = new Factura();
-                repositoryCliente.save(factura.getCliente());
-                facturaAGuardar.setCliente(factura.getCliente());
+
+                facturaAGuardar.setCliente(repositoryCliente.findById(factura.getCliente().getIdCliente()).get());
+
                 String fechaString = relojService.getDato();
                 LocalDateTime fecha = LocalDateTime.parse(fechaString);
                 facturaAGuardar.setCreadoEn(fecha);
                 facturaAGuardar.setId(factura.getId());
                 facturaAGuardar.setTotal(factura.getTotal());
                 List<DetalleFactura> lineas = new ArrayList<>();
+                DetalleFactura dfAux = new DetalleFactura();
+                Double totalFactura = 0.00;
                 for (DetalleFactura linea: factura.getDetalleFactura()){
-                    linea.setFactura(facturaAGuardar);
-                    lineas.add(linea);
-                    repositoryProducto.save(linea.getProducto());
+                    Producto producto = new Producto();
+                    producto = repositoryProducto.findById(linea.getProducto().getIdProducto()).get();
+                    dfAux.setFactura(facturaAGuardar);
+                    dfAux.setPrecioProducto(producto.getPrecio());
+                    totalFactura += producto.getPrecio();
+                    dfAux.setCantidad(linea.getCantidad());
+                    dfAux.setProducto(producto);
+                    lineas.add(dfAux);
                 }
+                facturaAGuardar.setTotal(totalFactura);
                 facturaAGuardar.setDetalleFactura(lineas);
 
 
@@ -138,6 +155,7 @@ public class FacturaService {
                 return ResponseEntity.status(409).body("409 -> La operacion no se pudo realizar, verificar!\n");
             }
         }
+
     }
 
     ///TENGO QUE ACOMODAR MODIFICAR
