@@ -44,6 +44,7 @@ public class FacturaService {
         for (int i = 1; i <= 3; i++) {
             List<DetalleFactura> df = new ArrayList<DetalleFactura>();
             Long id = (long) i;
+            int cantidadProductos = 0;
             Factura comprobante = new Factura(repositoryCliente.findById(id).get(), total);
             List<Producto> aux = new ArrayList<Producto>();
             List<Producto> listaProductos = new ArrayList<Producto>();
@@ -56,6 +57,7 @@ public class FacturaService {
             for (Producto p:listaProductos){
                 DetalleFactura detalle = new DetalleFactura(cantidad,  0.00, comprobante);
                 Producto pd = new Producto();
+                cantidadProductos += cantidad;
                 pd.setPrecio(p.getPrecio() * cantidad);
                 total += pd.getPrecio();
                 pd.setStock(p.getStock());
@@ -66,6 +68,7 @@ public class FacturaService {
                 detalle.setPrecioProducto(pd.getPrecio());
                 df.add(detalle);
             }
+            comprobante.setCantidadTotalProductosVendidos(cantidadProductos);
             comprobante.setTotal(total);
             total = 0.00;
 
@@ -96,10 +99,11 @@ public class FacturaService {
                 productoDTO.setCodigo(producto.getProducto().getCodigo());
                 productoDTO.setDescripcion(producto.getProducto().getDescripcion());
                 linea.setProducto(productoDTO);
-                linea.setPrecio(producto.getPrecioProducto());
+                linea.setPrecioProducto(producto.getPrecioProducto());
                 dtoDetalle.add(linea);
 
         }
+        dto.setCantidadTotalProductosVendidos(factura.getCantidadTotalProductosVendidos());
         dto.setDetalleFactura(dtoDetalle);
         dto.setCreadoEn(factura.getCreadoEn());
         dto.setTotal(factura.getTotal());
@@ -117,42 +121,59 @@ public class FacturaService {
 
         if (factura.getCliente() == null)    {
 
-            return ResponseEntity.status(409).body("409 -> La operacion no se pudo realizar, verificar!\n");
+            return ResponseEntity.status(409).body("Error Code 409\n Debe facilitar un numero de Cliente ID\n");
         } else
         {
-
-
             try {
-                Factura facturaAGuardar = new Factura();
-
-                facturaAGuardar.setCliente(repositoryCliente.findById(factura.getCliente().getIdCliente()).get());
-
-                String fechaString = relojService.getDato();
-                LocalDateTime fecha = LocalDateTime.parse(fechaString);
-                facturaAGuardar.setCreadoEn(fecha);
-                facturaAGuardar.setId(factura.getId());
-                facturaAGuardar.setTotal(factura.getTotal());
-                List<DetalleFactura> lineas = new ArrayList<>();
-                DetalleFactura dfAux = new DetalleFactura();
-                Double totalFactura = 0.00;
-                for (DetalleFactura linea: factura.getDetalleFactura()){
-                    Producto producto = new Producto();
-                    producto = repositoryProducto.findById(linea.getProducto().getIdProducto()).get();
-                    dfAux.setFactura(facturaAGuardar);
-                    dfAux.setPrecioProducto(producto.getPrecio());
-                    totalFactura += producto.getPrecio();
-                    dfAux.setCantidad(linea.getCantidad());
-                    dfAux.setProducto(producto);
-                    lineas.add(dfAux);
+                Long idCliente = factura.getCliente().getIdCliente();
+                if (repositoryCliente.existsById(idCliente)) {
+                    Factura facturaAGuardar = new Factura();
+                    facturaAGuardar.setCliente(repositoryCliente.findById(idCliente).get());
+                    String fechaString = relojService.getDato();
+                    LocalDateTime fecha = LocalDateTime.parse(fechaString);
+                    facturaAGuardar.setCreadoEn(fecha);
+                    facturaAGuardar.setId(factura.getId());
+                    facturaAGuardar.setTotal(factura.getTotal());
+                    List<DetalleFactura> lineas = new ArrayList<>();
+                    DetalleFactura dfAux = new DetalleFactura();
+                    Double totalFactura = 0.00;
+                    int cantidadProductos = 0;
+                    for (DetalleFactura linea : factura.getDetalleFactura()) {
+                        Producto producto = new Producto();
+                        Long idProducto = linea.getProducto().getIdProducto();
+                        if ( repositoryProducto.existsById(idProducto) ) {
+                            producto = repositoryProducto.findById(idProducto).get();
+                            dfAux.setFactura(facturaAGuardar);
+                            dfAux.setPrecioProducto(producto.getPrecio());
+                            totalFactura += producto.getPrecio();
+                            if (producto.getStock() >= linea.getCantidad()) {
+                                dfAux.setCantidad(linea.getCantidad());
+                                producto.setStock(producto.getStock() - linea.getCantidad());
+                                repositoryProducto.save(producto);
+                                cantidadProductos += linea.getCantidad();
+                                dfAux.setProducto(producto);
+                                lineas.add(dfAux);
+                            } else {
+                                return ResponseEntity.status(409).body("Error Code: 409\n No se puede vender " +
+                                        linea.getCantidad() + " unidades, por que supera el stock disponible de " +
+                                        producto.getStock() + " unidades");
+                            }
+                        } else {
+                            return ResponseEntity.status(409).body("Error Code: 409\nNo existe Producto con ID #" + idProducto);
+                        }
+                    }
+                    facturaAGuardar.setTotal(totalFactura);
+                    facturaAGuardar.setCantidadTotalProductosVendidos(cantidadProductos);
+                    facturaAGuardar.setDetalleFactura(lineas);
+                    this.repositorio.save(facturaAGuardar);
+                    return ResponseEntity.status(200).body("200 -> Operacion Satisfactoria: Factura agregada a la BBDD!\n");
                 }
-                facturaAGuardar.setTotal(totalFactura);
-                facturaAGuardar.setDetalleFactura(lineas);
-
-
-                this.repositorio.save(facturaAGuardar);
-                return ResponseEntity.status(200).body("200 -> Operacion Satisfactoria!\n");
+                else {
+                    return ResponseEntity.status(409).body("Error Code: 409\nNo existe Cliente con ID #" + idCliente
+                        + "\n");
+                }
             } catch (Exception e) {
-                return ResponseEntity.status(409).body("409 -> La operacion no se pudo realizar, verificar!\n");
+                return ResponseEntity.status(409).body("Error Code: 409\nLa operacion no se pudo realizar, verificar!\n");
             }
         }
 
@@ -183,7 +204,7 @@ public class FacturaService {
             Factura deleteFactura = this.repositorio.findById(id).get();
             //this.repoDetalleFactura.borrarPorIdFactura(id);
             this.repositorio.delete(deleteFactura);
-            return ResponseEntity.status(200).body("200 -> Operacion Satisfactoria!\n");
+            return ResponseEntity.status(200).body("200:\n Factura ID #" + id + " Eliminada!\n");
         } catch (Exception e) {
             return ResponseEntity.status(409).body("409 -> La operacion no se pudo realizar, verificar!\n");
         }

@@ -11,20 +11,23 @@ APIRest de ventas con patron de N Capas e implementacion de SpringBoot con JPA c
 - postman scripts: Scripts de Postman
 
 
-#### Dependencias
+### Dependencias
 - Spring Web
 - Spring Data JPA
 - Lombok
 
-###Configuracion de Spring
+### Configuracion
+#### Spring
 - Maven
 - Spring Boot version 3.2.2
 - Java version: 21
 
+#### MySQL
+- Puerto: 3306
 
 ### Ejecucion
 
-`$ java -jar 2daPreEntrega-Baldres.jar`
+`$ java -jar VentasAPIRest-Baldres.jar`
 
 ### Route:
 - localhost:8080/api/clientes/listar: Lista la tabla de clientes

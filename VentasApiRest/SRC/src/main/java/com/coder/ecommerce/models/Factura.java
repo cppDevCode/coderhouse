@@ -36,6 +36,9 @@ public class Factura implements Serializable {
     @Column
     private Double total;
 
+    @Column (name = "CANTIDAD_TOTAL_PRODUCTOS")
+    private int cantidadTotalProductosVendidos;
+
     @OneToMany(mappedBy = "factura", fetch=FetchType.EAGER,  cascade = CascadeType.ALL)
     private List<DetalleFactura> detalleFactura;
 

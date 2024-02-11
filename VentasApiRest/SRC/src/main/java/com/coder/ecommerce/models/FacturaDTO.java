@@ -1,9 +1,14 @@
 package com.coder.ecommerce.models;
 
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Getter
+@Setter
 public class FacturaDTO {
     private Long id;
     private ClienteDTO cliente;
@@ -12,44 +17,8 @@ public class FacturaDTO {
     private Double total;
     private List<DetalleFacturaDTO> detalleFactura;
 
+    private int cantidadTotalProductosVendidos;
+
     public FacturaDTO(){}
-    public List<DetalleFacturaDTO> getDetalleFactura() {
-        return this.detalleFactura;
-    }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public ClienteDTO getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(ClienteDTO cliente) {
-        this.cliente = cliente;
-    }
-
-    public LocalDateTime getCreadoEn() {
-        return creadoEn;
-    }
-
-    public void setCreadoEn(LocalDateTime creadoEn) {
-        this.creadoEn = creadoEn;
-    }
-
-    public Double getTotal() {
-        return total;
-    }
-
-    public void setTotal(Double total) {
-        this.total = total;
-    }
-
-    public void setDetalleFactura(List<DetalleFacturaDTO> detalleFactura) {
-        this.detalleFactura = detalleFactura;
-    }
 }
