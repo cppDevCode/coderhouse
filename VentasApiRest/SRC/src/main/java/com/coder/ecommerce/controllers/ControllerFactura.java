@@ -32,11 +32,6 @@ public class ControllerFactura {
        return this.facturaServicio.agregar(factura);
     }
 
-    @PutMapping("modificar/{id}")
-    public ResponseEntity<String> modificar(@PathVariable Long id, @RequestBody Factura factura){
-        return this.facturaServicio.modificar(id,factura);
-    }
-
     // Elimina la factura y todos los detalle ligados a esta
     @DeleteMapping("eliminar/{id}")
     public ResponseEntity<String> borrar(@PathVariable Long id){

@@ -186,30 +186,10 @@ public class FacturaService {
 
     }
 
-    ///TENGO QUE ACOMODAR MODIFICAR
-    public ResponseEntity<String> modificar(Long id, Factura factura){
-        if (factura.getCliente() == null || factura.getTotal() == null)    {
-            return ResponseEntity.status(409).body("409 -> La operacion no se pudo realizar, verificar!\n");
-        } else {
-            try {
-                Factura updateFactura = this.repositorio.findById(id).get();
-                updateFactura.setCliente(factura.getCliente());
-                updateFactura.setFecha(factura.getFecha());
-                updateFactura.setTotal(factura.getTotal());
-                this.repositorio.save(updateFactura);
-
-                return ResponseEntity.status(200).body("200 -> Operacion Satisfactoria!\n");
-            } catch (Exception e) {
-                return ResponseEntity.status(409).body("409 -> La operacion no se pudo realizar, verificar!\n");
-            }
-        }
-    }
-
-    //Elimina la factura y todos los detalles asociados a la misma
+   //Elimina la factura y todos los detalles asociados a la misma
     public ResponseEntity<String> borrar (Long id){
         try {
             Factura deleteFactura = this.repositorio.findById(id).get();
-            //this.repoDetalleFactura.borrarPorIdFactura(id);
             this.repositorio.delete(deleteFactura);
             return ResponseEntity.status(200).body("200:\n Factura ID #" + id + " Eliminada!\n");
         } catch (Exception e) {
