@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -13,7 +14,7 @@ public class FacturaDTO {
     private Long id;
     private ClienteDTO cliente;
 
-    private LocalDateTime creadoEn;
+    private Date fecha;
     private Double total;
     private List<DetalleFacturaDTO> detalleFactura;
 

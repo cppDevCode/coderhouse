@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -31,7 +32,7 @@ public class Factura implements Serializable {
     private Cliente cliente;
 
     @Column(name="creado_en")
-    private LocalDateTime creadoEn;
+    private Date fecha;
 
     @Column
     private Double total;
@@ -51,7 +52,7 @@ public class Factura implements Serializable {
     public Factura (Cliente clienteN, Double totalPesos){
         this.cliente = clienteN;
         this.total = totalPesos;
-        this.creadoEn = LocalDateTime.now();
+        this.fecha = new Date();
     }
 
 

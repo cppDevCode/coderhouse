@@ -8,8 +8,14 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 // Aqui se aplican toda la logica de Negocio de Factura
@@ -24,8 +30,6 @@ public class FacturaService {
     @Autowired
     private RepositoryCliente repositoryCliente;
 
-    @Autowired
-    private RelojService relojService;
 
     //Carga los datos de las facturas, detalle y productos
     public void inicializarDatosFactura(){
@@ -105,7 +109,7 @@ public class FacturaService {
         }
         dto.setCantidadTotalProductosVendidos(factura.getCantidadTotalProductosVendidos());
         dto.setDetalleFactura(dtoDetalle);
-        dto.setCreadoEn(factura.getCreadoEn());
+        dto.setFecha(Date.from(factura.getFecha().toInstant().minus(3, ChronoUnit.HOURS)));
         dto.setTotal(factura.getTotal());
         ClienteDTO clienteDTO = new ClienteDTO();
         Cliente cliente = new Cliente();
@@ -118,7 +122,7 @@ public class FacturaService {
     }
 
     public ResponseEntity<String> agregar(Factura factura){
-
+        RestTemplate restTemplate = new RestTemplate();
         if (factura.getCliente() == null)    {
 
             return ResponseEntity.status(409).body("Error Code 409\n Debe facilitar un numero de Cliente ID\n");
@@ -129,9 +133,12 @@ public class FacturaService {
                 if (repositoryCliente.existsById(idCliente)) {
                     Factura facturaAGuardar = new Factura();
                     facturaAGuardar.setCliente(repositoryCliente.findById(idCliente).get());
-                    String fechaString = relojService.getDato();
-                    LocalDateTime fecha = LocalDateTime.parse(fechaString);
-                    facturaAGuardar.setCreadoEn(fecha);
+                    String fechaString = restTemplate.getForObject("http://worldclockapi.com/api/json/utc/now", timeapi.class).getCurrentDateTime();
+                    SimpleDateFormat sf =new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
+
+                    Date fechaD = sf.parse(fechaString);
+
+                    facturaAGuardar.setFecha(Date.from(fechaD.toInstant().minus(3, ChronoUnit.HOURS)));
                     facturaAGuardar.setId(factura.getId());
                     facturaAGuardar.setTotal(factura.getTotal());
                     List<DetalleFactura> lineas = new ArrayList<>();
@@ -187,7 +194,7 @@ public class FacturaService {
             try {
                 Factura updateFactura = this.repositorio.findById(id).get();
                 updateFactura.setCliente(factura.getCliente());
-                updateFactura.setCreadoEn(factura.getCreadoEn());
+                updateFactura.setFecha(factura.getFecha());
                 updateFactura.setTotal(factura.getTotal());
                 this.repositorio.save(updateFactura);
 
