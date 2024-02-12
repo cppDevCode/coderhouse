@@ -15,6 +15,7 @@ APIRest de ventas con patron de N Capas e implementacion de SpringBoot con JPA c
 - Spring Web
 - Spring Data JPA
 - Lombok
+- MySql Driver
 
 ### Configuracion
 #### Spring
