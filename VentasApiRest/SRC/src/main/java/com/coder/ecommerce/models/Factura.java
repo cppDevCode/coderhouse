@@ -3,14 +3,11 @@ import jakarta.persistence.*;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.NonNull;
 
 //Establezco Entidad para la tabla factura relacionada con la tabla cliente
 @Entity
@@ -44,10 +41,6 @@ public class Factura implements Serializable {
     private List<DetalleFactura> detalleFactura;
 
     public Factura(){}
-
-    public List<DetalleFactura> getDetalleFactura() {
-        return this.detalleFactura;
-    }
 
     public Factura (Cliente clienteN, Double totalPesos){
         this.cliente = clienteN;

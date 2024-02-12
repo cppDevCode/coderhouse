@@ -2,16 +2,15 @@ package com.coder.ecommerce.service;
 
 import com.coder.ecommerce.models.Cliente;
 import com.coder.ecommerce.models.ClienteDTO;
-import com.coder.ecommerce.models.Factura;
 import com.coder.ecommerce.repository.RepositoryCliente;
 import com.coder.ecommerce.repository.RepositoryFactura;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 //Aqui se aplican toda la logica de Negocio de Clientes
 
@@ -25,7 +24,7 @@ public class ClienteService {
     private RepositoryFactura repositoryFactura;
 
     public List<ClienteDTO> listar (){
-        List<ClienteDTO> clienteDTOS = new ArrayList<ClienteDTO>();
+        List<ClienteDTO> clienteDTOS = new ArrayList<>();
         for (Cliente cliente:this.repositorio.findAll()){
             ClienteDTO clienteDTO = new ClienteDTO();
             clienteDTO.setNombre(cliente.getNombre());
@@ -61,12 +60,17 @@ public class ClienteService {
 
     public ResponseEntity<String> actualizar(Long id, Cliente cliente){
         try {
-            Cliente updateCliente = this.repositorio.findById(id).get();
-            updateCliente.setNombre(cliente.getNombre());
-            updateCliente.setApellido(cliente.getApellido());
-            updateCliente.setDni(cliente.getDni());
-            this.repositorio.save(updateCliente);
-            return ResponseEntity.status(200).body("200 -> Operacion Satisfactoria!\n");
+            Optional<Cliente> resultadoBBDD = this.repositorio.findById(id);
+            if (resultadoBBDD.isPresent()) {
+                Cliente updateCliente = resultadoBBDD.get();
+                updateCliente.setNombre(cliente.getNombre());
+                updateCliente.setApellido(cliente.getApellido());
+                updateCliente.setDni(cliente.getDni());
+                this.repositorio.save(updateCliente);
+                return ResponseEntity.status(200).body("200 -> Operacion Satisfactoria!\n");
+            } else {
+                return ResponseEntity.status(409).body("Error Code: 409\nID #" + id +" No hallado en la BBDD");
+            }
         } catch (Exception e) {
         return ResponseEntity.status(409).body("409 -> La operacion no se pudo realizar, verificar!\n");
         }
@@ -74,10 +78,14 @@ public class ClienteService {
 
     public ResponseEntity<String> borrar(Long id){
         try{
-            Cliente deleteCliente = this.repositorio.findById(id).get();
-
-            this.repositorio.delete(deleteCliente);
-            return ResponseEntity.status(200).body("200 -> Operacion Satisfactoria!\n");
+            Optional<Cliente> resultadoBBDD = this.repositorio.findById(id);
+            if (resultadoBBDD.isPresent()) {
+                Cliente deleteCliente = resultadoBBDD.get();
+                this.repositorio.delete(deleteCliente);
+                return ResponseEntity.status(200).body("200 -> Operacion Satisfactoria!\n");
+            } else {
+                return ResponseEntity.status(409).body("Error Code: 409\nNo existe Cliente con ID #" + id + " en la BBDD");
+            }
         } catch (Exception e) {
             return ResponseEntity.status(409).body("409 -> La operacion no se pudo realizar, verificar!\n");
         }

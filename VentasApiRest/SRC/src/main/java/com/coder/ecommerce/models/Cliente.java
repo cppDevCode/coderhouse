@@ -2,8 +2,6 @@ package com.coder.ecommerce.models;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +25,7 @@ public class Cliente {
     private String dni;
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
-    private List<Factura> facturas = new ArrayList<Factura>();
+    private List<Factura> facturas = new ArrayList<>();
 
     public Cliente(){}
     public Cliente(String nom, String apel, String dni){

@@ -13,11 +13,4 @@ public class Controller {
         return ResponseEntity.status(200).body("200: Coneccion establecida :-) ");
     }
 
-    @GetMapping("/")
-    public String ayuda()
-    {
-
-        return "<b size=\"10\">API - Ayuda:</b><br><br><br><b>localhost:8080/[clientes] [productos] [facturas]</b>:" +
-                "<br>/listar<br>/agregar<br>/modificar/{id}<br>/eliminar";
-    }
 }

@@ -2,7 +2,6 @@ package com.coder.ecommerce.controllers;
 
 import com.coder.ecommerce.models.Cliente;
 import com.coder.ecommerce.models.ClienteDTO;
-import com.coder.ecommerce.models.Factura;
 import com.coder.ecommerce.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
