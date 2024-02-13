@@ -1,5 +1,6 @@
 package com.coder.ecommerce.service;
 
+import com.coder.ecommerce.config.ConfigSwagger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
@@ -17,6 +18,8 @@ public class CorrerAlIniciarService {
     public void correrAlIniciarService() {
         clienteService.inicializarClientes();
         facturaService.inicializarDatosFactura();
+        ConfigSwagger s = new ConfigSwagger();
+        s.customOpenAPI();
 
     }
 }

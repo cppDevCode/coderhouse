@@ -1,12 +1,10 @@
 package com.coder.ecommerce;
 
-import com.coder.ecommerce.models.Cliente;
-import com.coder.ecommerce.service.ClienteService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
+
 public class EcommerceApplication {
 
 

@@ -6,7 +6,6 @@ APIRest de ventas con patron de N Capas e implementacion de SpringBoot con JPA c
 ### Estructura del Repositorio
 
 - bin: Contiene el/los archivo/s Java
-- doc: Documentacion de la APIRest
 - src: codigo fuente de la APIRest
 - postman scripts: Scripts de Postman
 
@@ -41,7 +40,7 @@ APIRest de ventas con patron de N Capas e implementacion de SpringBoot con JPA c
 - localhost:8080/api/productos/eliminar/{id}
 - localhost:8080/api/productos/stock?id=[ID]&ventas=[PRODUCTOS_VENDIDOS]
 - localhost:8080/api/facturas/listar
-- localhost:8080/api/facturas/agregar
+- localhost:8080/documentacion.html: Documentacion API con Swagger
 
 
 

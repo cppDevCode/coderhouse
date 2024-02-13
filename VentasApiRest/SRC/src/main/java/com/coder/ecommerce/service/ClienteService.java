@@ -58,7 +58,7 @@ public class ClienteService {
         }
     }
 
-    public ResponseEntity<String> actualizar(Long id, Cliente cliente){
+    public ResponseEntity<String> actualizar(Long id, ClienteDTO cliente){
         try {
             Optional<Cliente> resultadoBBDD = this.repositorio.findById(id);
             if (resultadoBBDD.isPresent()) {
@@ -72,7 +72,7 @@ public class ClienteService {
                 return ResponseEntity.status(409).body("Error Code: 409\nID #" + id +" No hallado en la BBDD");
             }
         } catch (Exception e) {
-        return ResponseEntity.status(409).body("409 -> La operacion no se pudo realizar, verificar!\n");
+        return ResponseEntity.status(409).body("Error Code: 409 -> La operacion no se pudo realizar, verificar!\n");
         }
     }
 
